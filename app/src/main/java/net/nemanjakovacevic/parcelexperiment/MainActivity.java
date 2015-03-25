@@ -3,31 +3,21 @@ package net.nemanjakovacevic.parcelexperiment;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.parceler.Parcels;
-
 import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.text.DecimalFormat;
@@ -70,32 +60,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void launchButtonClicked(View view){
-
-        if(mList == null){
-            Toast.makeText(this, "Please generate a list first!", Toast.LENGTH_SHORT).show();
-        }
-
-        boolean useSerialization = ((RadioButton)findViewById(R.id.serialization)).isChecked();
-        Intent intent = new Intent(this, OtherActivity.class);
-        if(useSerialization){
-            USE_SERIALIZATION = true;
-            Toast.makeText(this, "Using java serialization", Toast.LENGTH_SHORT).show();
-            Log.i("ParcelExperiment", "Using java serialization");
-        } else {
-            USE_SERIALIZATION = false;
-            Toast.makeText(this, "Using parcelable/parceler", Toast.LENGTH_SHORT).show();
-            Log.i("ParcelExperiment","Using parcelable/parceler");
-        }
-
-        START_TIMESTAMP = System.nanoTime();
-
-        if(useSerialization){
-            intent.putExtra("package", new Package(mList));
-        } else {
-            intent.putExtra("package", Parcels.wrap(new Package(mList)));
-        }
-
-        startActivity(intent);
+        Toast.makeText(this, "I broke this to test Parcelable!", Toast.LENGTH_SHORT).show();
     }
 
     public void generateButtonClicked(View view){
@@ -137,9 +102,10 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private byte[] marshallToByteArrayViaParceler(ArrayList<EmptyObject> list) {
-        Parcelable parcelable = Parcels.wrap(new Package(list));
+//        Parcelable parcelable = Parcels.wrap(new Package(list));
         Parcel parcel = Parcel.obtain();
-        parcelable.writeToParcel(parcel, 0);
+        parcel.writeTypedList(list);
+//        parcelable.writeToParcel(parcel, 0);
         byte[] bytes = parcel.marshall();
         return bytes;
 
